@@ -1531,6 +1531,41 @@ export function findMatch(defaultRoot: string, patterns: string[] | string, find
 }
 
 //-----------------------------------------------------
+// Http Proxy Helper
+//-----------------------------------------------------
+
+export interface ProxyConfiguration {
+    proxyUrl: string;
+    proxyUsername?: string;
+    proxyPassword?: string;
+    proxyBypassHosts?: string[];
+}
+
+export function getHttpProxyConfiguration(): ProxyConfiguration {
+    let proxyUrl: string = getVariable('Agent.ProxyUrl');
+    if (proxyUrl && proxyUrl.length > 0) {
+        let proxyUsername: string = getVariable('Agent.ProxyUsername');
+        let proxyPassword: string = getVariable('Agent.ProxyPassword');
+
+        let proxyBypassHosts: string[]
+        let proxyBypassHostsJson = getVariable('Agent.ProxyBypassList');
+        if (proxyBypassHostsJson) {
+            proxyBypassHosts = JSON.parse(proxyBypassHostsJson);
+        }
+
+        return {
+            proxyUrl: proxyUrl,
+            proxyUsername: proxyUsername,
+            proxyPassword: proxyPassword,
+            proxyBypassHosts: proxyBypassHosts
+        };
+    }
+    else {
+        return null;
+    }
+}
+
+//-----------------------------------------------------
 // Test Publisher
 //-----------------------------------------------------
 export class TestPublisher {
