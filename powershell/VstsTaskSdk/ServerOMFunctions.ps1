@@ -338,7 +338,9 @@ function Get-VssHttpClient {
 
         [string]$Uri,
 
-        $VssCredentials)
+        $VssCredentials,
+        
+        $WebProxy = (Get-WebProxy))
 
     Trace-EnteringInvocation -InvocationInfo $MyInvocation
     $originalErrorActionPreference = $ErrorActionPreference
@@ -361,6 +363,9 @@ function Get-VssHttpClient {
         # Validate the type can be loaded.
         $null = Get-OMType -TypeName $TypeName -OMKind 'WebApi' -OMDirectory $OMDirectory -Require
 
+        # Update proxy setting for vss http client
+        [Microsoft.VisualStudio.Services.Common.VssHttpMessageHandler]::DefaultWebProxy = $WebProxy
+        
         # Try to construct the HTTP client.
         Write-Verbose "Constructing HTTP client."
         try {
@@ -417,6 +422,26 @@ function Get-VssHttpClient {
         $ErrorActionPreference = $originalErrorActionPreference
         Write-Error $_
     } finally {
+        Trace-LeavingInvocation -InvocationInfo $MyInvocation
+    }
+}
+
+function Get-WebProxy {
+    [CmdletBinding()]
+    param()
+
+    Trace-EnteringInvocation -InvocationInfo $MyInvocation
+    try
+    {
+        $ProxyUrl = Get-TaskVariable -Name Agent.ProxyUrl
+        $ProxyUserName = Get-TaskVariable -Name Agent.ProxyUserName
+        $ProxyPassword = Get-TaskVariable -Name Agent.ProxyPassword
+        $ProxyBypassListJson = Get-TaskVariable -Name Agent.ProxyBypassList
+        [string[]]$ProxyBypassList = ConvertFrom-Json -InputObject $ProxyBypassListJson
+        
+        return New-Object -TypeName VstsTaskSdk.VstsWebProxy -ArgumentList @($ProxyUrl, $ProxyUserName, $ProxyPassword, $ProxyBypassList)
+    }
+    finally {
         Trace-LeavingInvocation -InvocationInfo $MyInvocation
     }
 }
