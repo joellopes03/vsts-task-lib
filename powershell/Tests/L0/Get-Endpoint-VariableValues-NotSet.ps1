@@ -11,9 +11,9 @@ Invoke-VstsTaskScript -ScriptBlock {
     $actual = Get-VstsEndpoint -Name 'SomeName'
 	
     # Assert.
-	Assert-IsNotNullOrEmpty $actual
+    Assert-IsNotNullOrEmpty $actual
     Assert-AreEqual 'Some property value 2' $actual.Auth.SomeProperty2
-	Assert-IsNullOrEmpty $actual.Auth.SomeProperty
+    Assert-IsNullOrEmpty $actual.Auth.SomeProperty
     Assert-IsNullOrEmpty $actual.Data.SomeDataProperty
     Assert-IsNullOrEmpty $env:ENDPOINT_URL_SOMENAME
     Assert-IsNullOrEmpty $env:ENDPOINT_AUTH_SOMENAME
