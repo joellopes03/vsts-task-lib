@@ -286,9 +286,9 @@ export function getEndpointUrl(id: string, optional: boolean): string {
 export function getEndpointDataParameter(id: string, key: string, optional: boolean): string {
     var dataParamVal = process.env['ENDPOINT_DATA_' + id + '_' + key.toUpperCase()];
 
-    if(dataParamVal) {
+    if (dataParamVal) {
         var regexMatch = /^\$\((.*)\)$/i.exec(dataParamVal);
-        if(regexMatch && regexMatch.length >= 2) {
+        if (regexMatch && regexMatch.length == 2) {
             dataParamVal = getVariable(regexMatch[1]);
         }
     }
@@ -332,9 +332,9 @@ export function getEndpointAuthorizationScheme(id: string, optional: boolean): s
 export function getEndpointAuthorizationParameter(id: string, key: string, optional: boolean): string {
     var authParam = im._vault.retrieveSecret('ENDPOINT_AUTH_PARAMETER_' + id + '_' + key.toUpperCase());
 
-    if(authParam) {
+    if (authParam) {
         var regexMatch = /^\$\((.*)\)$/i.exec(authParam);
-        if(regexMatch && regexMatch.length >= 2) {
+        if (regexMatch && regexMatch.length == 2) {
             authParam = getVariable(regexMatch[1]);
         }
     }

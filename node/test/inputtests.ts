@@ -404,12 +404,34 @@ describe('Input Tests', function () {
 
         done();
     })
+    it('gets endpoint auth parameter from variable', function (done) {
+        this.timeout(1000);
+        process.env['var'] = 'val1'
+        process.env['ENDPOINT_AUTH_PARAMETER_id1_PARAM1'] = '$(var)';
+        im._loadData();
+
+        var data = tl.getEndpointAuthorizationParameter('id1', 'param1', true);
+        assert(data, 'should return a string value');
+        assert.equal(data, 'val1', 'should be correct auth param');
+
+        done();
+    })
     it('gets undefined if endpoint auth parameter is not set', function (done) {
         this.timeout(1000);
         im._loadData();
 
         var data = tl.getEndpointAuthorizationParameter('id1', 'noparam', true);
         assert(!data, 'should be undefined when auth param is not set');
+
+        done();
+    })
+    it('gets undefined if endpoint auth parameter variable is not set', function (done) {
+        this.timeout(1000);
+        process.env['ENDPOINT_AUTH_PARAMETER_id1_PARAM1'] = '$(novar)';
+        im._loadData();
+
+        var data = tl.getEndpointDataParameter('id1', 'PARAM1', true);
+        assert.equal(data, undefined, 'Error should occur if endpoint auth parameter variable is not set');
 
         done();
     })
@@ -424,12 +446,35 @@ describe('Input Tests', function () {
 
         done();
     })
+    it('gets an endpoint data from variable', function (done) {
+        this.timeout(1000);
+        process.env['var'] = 'val1';
+        process.env['ENDPOINT_DATA_id1_PARAM1'] = '$(var)';
+        im._loadData();
+
+        var data = tl.getEndpointDataParameter('id1', 'param1', true);
+        assert(data, 'should return a string value');
+        assert.equal(data, 'val1', 'should be correct object');
+
+        done();
+    })
     it('gets undefined if endpoint data is not set', function (done) {
         this.timeout(1000);
         im._loadData();
 
         var data = tl.getEndpointDataParameter('id1', 'noparam', true);
         assert.equal(data, undefined, 'Error should occur if endpoint data is not set');
+
+        done();
+    })
+    it('gets undefined if endpoint data variable is not set', function (done) {
+        this.timeout(1000);
+        process.env['ENDPOINT_DATA_id1_PARAM1'] = '$(novar)';
+        im._loadData();
+
+        var data = tl.getEndpointDataParameter('id1', 'PARAM1', true);
+        
+        assert.equal(data, undefined, 'Error should occur if endpoint data variable is not set');
 
         done();
     })

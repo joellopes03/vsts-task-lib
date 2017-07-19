@@ -41,9 +41,9 @@ function Get-Endpoint {
         $key = "ENDPOINT_AUTH_$Name"
         if ($auth = (Get-VaultValue -Description $description -Key $key -Require:$Require)) {
             $auth = ConvertFrom-Json -InputObject $auth
-            if($auth -and $auth.psobject) {
-                foreach($prop in $auth.psobject.properties) {
-                    if( $prop.Value -is [string] -and $prop.Value -match "^\`$\((?<variableName>.+)\)$") {
+            if ($auth -and $auth.psobject) {
+                foreach ($prop in $auth.psobject.properties) {
+                    if ($prop.Value -is [string] -and $prop.Value -match "^\`$\((?<variableName>.+)\)$") {
                         $prop.Value = Get-TaskVariable -Name $matches["variableName"]
                     }
                 }
@@ -55,9 +55,9 @@ function Get-Endpoint {
         $key = "ENDPOINT_DATA_$Name"
         if ($data = (Get-VaultValue -Description $description -Key $key)) {
             $data = ConvertFrom-Json -InputObject $data
-            if($data -and $data.psobject) {
-                foreach($prop in $data.psobject.properties) {
-                    if( $prop.Value -is [string] -and $prop.Value -match "^\`$\((?<variableName>.+)\)$") {
+            if ($data -and $data.psobject) {
+                foreach ($prop in $data.psobject.properties) {
+                    if ($prop.Value -is [string] -and $prop.Value -match "^\`$\((?<variableName>.+)\)$") {
                         $prop.Value = Get-TaskVariable -Name $matches["variableName"]
                     }
                 }
