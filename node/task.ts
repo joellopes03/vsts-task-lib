@@ -112,9 +112,10 @@ export function getVariables(): VariableInfo[] {
 /**
  * Sets a variable which will be available to subsequent tasks as well.
  * 
- * @param     name    name of the variable to set
- * @param     val     value to set
- * @param     secret  whether variable is secret.  optional, defaults to false
+ * @param     name     name of the variable to set
+ * @param     val      value to set
+ * @param     secret   whether variable is secret.  optional, defaults to false
+ * @param     isOutput whether variable is output variable. optional, defaults to false.
  * @returns   void
  */
 export function setVariable(name: string, val: string, secret: boolean = false, isOutput:boolean = false): void {
